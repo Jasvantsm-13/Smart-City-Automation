@@ -1,0 +1,83 @@
+#include <Servo.h>
+
+// Create Servo objects
+Servo servo1, servo2, servo3, servo4;
+
+// Define LED pins
+const int greenLED1 = 10, redLED1 = 11;
+const int greenLED2 = 12, redLED2 = 13;
+const int greenLED3 = A0, redLED3 = A1;
+const int greenLED4 = A2, redLED4 = A3;
+
+// Servo open and close positions
+const int openPos = 90;  // Open position
+const int closePos = 0;  // Closed position
+const int delayTime = 10000;  // Servo open duration (10 sec)
+const int switchDelay = 1000;  // Delay before switching (1 sec)
+
+// Function Prototypes
+void closeAll();
+void controlRod(Servo &servo, int greenLED, int redLED, int otherRed1, int otherRed2, int otherRed3);
+
+void setup() {
+    // Attach servos to pins
+    servo1.attach(6);
+    servo2.attach(7);
+    servo3.attach(8);
+    servo4.attach(9);
+
+    // Set LED pins as outputs
+    pinMode(greenLED1, OUTPUT); pinMode(redLED1, OUTPUT);
+    pinMode(greenLED2, OUTPUT); pinMode(redLED2, OUTPUT);
+    pinMode(greenLED3, OUTPUT); pinMode(redLED3, OUTPUT);
+    pinMode(greenLED4, OUTPUT); pinMode(redLED4, OUTPUT);
+
+    // Ensure all rods start closed
+    closeAll();
+}
+
+void loop() {
+    // Control each rod one by one
+    controlRod(servo1, greenLED1, redLED1, redLED2, redLED3, redLED4);
+    controlRod(servo2, greenLED2, redLED2, redLED1, redLED3, redLED4);
+    controlRod(servo3, greenLED3, redLED3, redLED1, redLED2, redLED4);
+    controlRod(servo4, greenLED4, redLED4, redLED1, redLED2, redLED3);
+}
+
+void controlRod(Servo &servo, int greenLED, int redLED, int otherRed1, int otherRed2, int otherRed3) {
+    // Activate the current rod
+    digitalWrite(greenLED, HIGH);   // Turn ON Green LED
+    digitalWrite(redLED, LOW);      // Turn OFF its Red LED
+
+    // Ensure other Red LEDs remain ON
+    digitalWrite(otherRed1, HIGH);
+    digitalWrite(otherRed2, HIGH);
+    digitalWrite(otherRed3, HIGH);
+
+    // Move servo to open position
+    servo.write(openPos);
+    delay(delayTime);
+
+    // Reset: Turn OFF Green LED, Turn ON Red LED
+    digitalWrite(greenLED, LOW);
+    digitalWrite(redLED, HIGH);
+
+    // Move servo to close position
+    servo.write(closePos);
+    delay(switchDelay);
+}
+
+// Function to close all rods and set LEDs accordingly
+void closeAll() {
+    // Turn OFF all Green LEDs, Turn ON all Red LEDs
+    digitalWrite(greenLED1, LOW); digitalWrite(redLED1, HIGH);
+    digitalWrite(greenLED2, LOW); digitalWrite(redLED2, HIGH);
+    digitalWrite(greenLED3, LOW); digitalWrite(redLED3, HIGH);
+    digitalWrite(greenLED4, LOW); digitalWrite(redLED4, HIGH);
+
+    // Close all servos
+    servo1.write(closePos);
+    servo2.write(closePos);
+    servo3.write(closePos);
+    servo4.write(closePos);
+}
