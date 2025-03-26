@@ -25,7 +25,7 @@ This project demonstrates a **Smart City Automation System** using **Arduino** a
    - Open the `Arduino IDE`.
    - Connect **Arduino Uno** via USB.
    - Select the correct **Board & Port**.
-   - Upload the provided `.ino` file.
+   - Upload coad.
 
 ## Code Explanation
 - The Arduino controls **traffic lights** using **timed delays**.
